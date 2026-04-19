@@ -1,0 +1,13 @@
+{
+  "DecisionTree": {
+    "criterion": "entropy",
+    "max_depth": 8,
+    "min_samples_leaf": 8,
+    "min_samples_split": 2
+  },
+  "LogisticRegression": {
+    "C": 1,
+    "max_iter": 1000,
+    "solver": "lbfgs"
+  }
+}

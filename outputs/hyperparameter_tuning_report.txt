@@ -1,0 +1,38 @@
+Model: DecisionTree
+Best Params: {'criterion': 'entropy', 'max_depth': 8, 'min_samples_leaf': 8, 'min_samples_split': 2}
+Best CV F1-macro: 0.6714
+Test Accuracy: 0.7447
+Test F1-macro: 0.6639
+
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       0.79      0.73      0.76       427
+           1       0.47      0.34      0.40       238
+           2       0.78      0.90      0.84       663
+
+    accuracy                           0.74      1328
+   macro avg       0.68      0.66      0.66      1328
+weighted avg       0.73      0.74      0.73      1328
+
+================================================================================
+
+Model: LogisticRegression
+Best Params: {'C': 1, 'max_iter': 1000, 'solver': 'lbfgs'}
+Best CV F1-macro: 0.6919
+Test Accuracy: 0.7786
+Test F1-macro: 0.7086
+
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       0.81      0.77      0.79       427
+           1       0.56      0.41      0.48       238
+           2       0.81      0.92      0.86       663
+
+    accuracy                           0.78      1328
+   macro avg       0.73      0.70      0.71      1328
+weighted avg       0.77      0.78      0.77      1328
+
+================================================================================
+
