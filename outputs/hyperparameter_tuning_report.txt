@@ -1,37 +1,132 @@
 Model: DecisionTree
-Best Params: {'criterion': 'entropy', 'max_depth': 8, 'min_samples_leaf': 8, 'min_samples_split': 2}
-Best CV F1-macro: 0.6714
-Test Accuracy: 0.7447
-Test F1-macro: 0.6639
+Best Params: {'class_weight': None, 'criterion': 'gini', 'max_depth': 8, 'min_samples_leaf': 4, 'min_samples_split': 20}
+Best CV F1-macro: 0.6636
+Test Accuracy: 0.7364
+Test F1-macro: 0.6597
 
 Classification Report:
               precision    recall  f1-score   support
 
-           0       0.79      0.73      0.76       427
-           1       0.47      0.34      0.40       238
-           2       0.78      0.90      0.84       663
+     Dropout       0.84      0.63      0.72       427
+    Enrolled       0.44      0.39      0.41       238
+    Graduate       0.77      0.93      0.84       663
 
     accuracy                           0.74      1328
-   macro avg       0.68      0.66      0.66      1328
-weighted avg       0.73      0.74      0.73      1328
+   macro avg       0.68      0.65      0.66      1328
+weighted avg       0.74      0.74      0.73      1328
 
 ================================================================================
 
 Model: LogisticRegression
-Best Params: {'C': 1, 'max_iter': 1000, 'solver': 'lbfgs'}
-Best CV F1-macro: 0.6919
-Test Accuracy: 0.7786
-Test F1-macro: 0.7086
+Best Params: {'lr__C': 1, 'lr__class_weight': 'balanced', 'lr__solver': 'newton-cg'}
+Best CV F1-macro: 0.6946
+Test Accuracy: 0.7259
+Test F1-macro: 0.6888
 
 Classification Report:
               precision    recall  f1-score   support
 
-           0       0.81      0.77      0.79       427
-           1       0.56      0.41      0.48       238
-           2       0.81      0.92      0.86       663
+     Dropout       0.81      0.71      0.76       427
+    Enrolled       0.42      0.61      0.50       238
+    Graduate       0.86      0.77      0.81       663
+
+    accuracy                           0.73      1328
+   macro avg       0.69      0.70      0.69      1328
+weighted avg       0.76      0.73      0.74      1328
+
+================================================================================
+
+Model: RandomForest
+Best Params: {'class_weight': 'balanced_subsample', 'max_depth': None, 'min_samples_leaf': 1, 'min_samples_split': 10, 'n_estimators': 200}
+Best CV F1-macro: 0.7120
+Test Accuracy: 0.7779
+Test F1-macro: 0.7211
+
+Classification Report:
+              precision    recall  f1-score   support
+
+     Dropout       0.83      0.74      0.78       427
+    Enrolled       0.53      0.51      0.52       238
+    Graduate       0.83      0.90      0.86       663
 
     accuracy                           0.78      1328
-   macro avg       0.73      0.70      0.71      1328
+   macro avg       0.73      0.72      0.72      1328
+weighted avg       0.78      0.78      0.78      1328
+
+================================================================================
+
+Model: GradientBoosting
+Best Params: {'learning_rate': 0.1, 'max_depth': 5, 'min_samples_split': 2, 'n_estimators': 100, 'subsample': 1.0}
+Best CV F1-macro: 0.7099
+Test Accuracy: 0.7786
+Test F1-macro: 0.7144
+
+Classification Report:
+              precision    recall  f1-score   support
+
+     Dropout       0.82      0.74      0.78       427
+    Enrolled       0.56      0.45      0.50       238
+    Graduate       0.82      0.92      0.86       663
+
+    accuracy                           0.78      1328
+   macro avg       0.73      0.71      0.71      1328
+weighted avg       0.77      0.78      0.77      1328
+
+================================================================================
+
+Model: SVC
+Best Params: {'svc__C': 1, 'svc__class_weight': 'balanced', 'svc__gamma': 'scale', 'svc__kernel': 'linear'}
+Best CV F1-macro: 0.6944
+Test Accuracy: 0.7342
+Test F1-macro: 0.6947
+
+Classification Report:
+              precision    recall  f1-score   support
+
+     Dropout       0.81      0.71      0.76       427
+    Enrolled       0.42      0.61      0.50       238
+    Graduate       0.86      0.79      0.83       663
+
+    accuracy                           0.73      1328
+   macro avg       0.70      0.71      0.69      1328
+weighted avg       0.77      0.73      0.75      1328
+
+================================================================================
+
+Model: MLP
+Best Params: {'mlp__activation': 'tanh', 'mlp__alpha': 0.0001, 'mlp__hidden_layer_sizes': (50, 50), 'mlp__learning_rate': 'constant'}
+Best CV F1-macro: 0.6684
+Test Accuracy: 0.7229
+Test F1-macro: 0.6262
+
+Classification Report:
+              precision    recall  f1-score   support
+
+     Dropout       0.76      0.76      0.76       427
+    Enrolled       0.41      0.24      0.31       238
+    Graduate       0.76      0.87      0.81       663
+
+    accuracy                           0.72      1328
+   macro avg       0.64      0.63      0.63      1328
+weighted avg       0.70      0.72      0.70      1328
+
+================================================================================
+
+Model: RandomForest+SMOTE
+Best Params: {'class_weight': 'balanced', 'max_depth': None, 'min_samples_leaf': 1, 'min_samples_split': 2, 'n_estimators': 200}
+Best CV F1-macro: 0.8667
+Test Accuracy: 0.7786
+Test F1-macro: 0.7154
+
+Classification Report:
+              precision    recall  f1-score   support
+
+     Dropout       0.82      0.76      0.79       427
+    Enrolled       0.53      0.46      0.49       238
+    Graduate       0.82      0.90      0.86       663
+
+    accuracy                           0.78      1328
+   macro avg       0.73      0.71      0.72      1328
 weighted avg       0.77      0.78      0.77      1328
 
 ================================================================================
