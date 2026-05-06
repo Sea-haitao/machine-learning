@@ -145,11 +145,11 @@ difficulty later observed in Phases 4--5.
 \subsection{Clustering Analysis}
 % Aim: ~1 page. Algorithm descriptions + comparison table + figure.
 
-We compare three algorithms: K-means (distance-based centroids),
+We compare three clustering algorithms: K-means (centroid-based, using Euclidean distance),
 Agglomerative Hierarchical Clustering (Ward linkage, bottom-up
 merging), and Gaussian Mixture Models (probabilistic, full
-covariance). Each is run for $K \in \{2, \ldots, 10\}$; we evaluate
-on three internal metrics (Silhouette, Calinski--Harabasz,
+covariance). For each method, we search $K \in \{2, \ldots, 10\}$ and evaluate 
+cluster quality using three internal metrics (Silhouette, Calinski--Harabasz,
 Davies--Bouldin) and three external metrics against the true class
 labels (ARI, NMI, Purity).
 
@@ -170,12 +170,19 @@ labels (ARI, NMI, Purity).
   \end{tabular}
 \end{table}
 
-\textbf{Best choice:} K-means with $K{=}3$ as the primary method
-(best internal separation); GMM as supplementary reference for
-probabilistic assignment. The modest external scores indicate that
-unsupervised clusters only partially align with academic outcome
-labels --- consistent with the t-SNE picture where Enrolled is not
-linearly separable.
+\textbf{Determination of the Clustering Method:} K-means with $K{=}3$ is selected 
+as the primary clustering method and GMM as a supplementary reference. Across all 
+considered internal evaluation metrics, K-means achieves the clearest internal separation. 
+GMM is employed as a complementary reference for probabilistic assignment, as its soft 
+assignment mechanism facilitates the interpretation of ambiguous sample points. Though 
+agglomerative clustering shows some competitive structures at certain values of $K$, 
+it does not consistently outperform K-means. 
+\newline Moreover, the corresponding external scores are modest, indicating that the unsupervised 
+clusters only partially correspond to the academic outcome labels. Such moderate agreement 
+with ground-truth labels is typical in educational datasets, where student outcomes are shaped 
+by multi-dimensional factors that cannot be fully captured by distance-based partitioning alone. 
+This observation aligns with the t-SNE visualization where the Enrolled class is not cleanly 
+separable in low-dimensional space.
 
 \subsection{Prediction: Training and Testing}
 % Aim: ~1 page. Models + split + confusion matrices + comparison.
