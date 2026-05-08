@@ -145,13 +145,13 @@ difficulty later observed in Phases 4--5.
 \subsection{Clustering Analysis}
 % Aim: ~1 page. Algorithm descriptions + comparison table + figure.
 
-We compare three clustering algorithms: K-means (centroid-based, using Euclidean distance),
-Agglomerative Hierarchical Clustering (Ward linkage, bottom-up
-merging), and Gaussian Mixture Models (probabilistic, full
-covariance). For each method, we search $K \in \{2, \ldots, 10\}$ and evaluate 
-cluster quality using three internal metrics (Silhouette, Calinski--Harabasz,
-Davies--Bouldin) and three external metrics against the true class
-labels (ARI, NMI, Purity).
+We compare three clustering algorithms: K-means (centroid-based with 
+Euclidean distance), agglomerative hierarchical clustering (bottom-up 
+merging with Ward linkage), and Gaussian Mixture Models (probabilistic, full 
+covariance). All approaches are implemented with a fixed cluster number 
+$K=3$. Cluster quality is assessed via three internal validation metrics 
+(Silhouette, Calinski--Harabasz, Davies--Bouldin) and three external 
+metrics (ARI, NMI, Purity) against the true class labels.
 
 \begin{table}[h]
   \centering
@@ -170,19 +170,30 @@ labels (ARI, NMI, Purity).
   \end{tabular}
 \end{table}
 
-\textbf{Determination of the Clustering Method:} K-means with $K{=}3$ is selected 
-as the primary clustering method and GMM as a supplementary reference. Across all 
-considered internal evaluation metrics, K-means achieves the clearest internal separation. 
-GMM is employed as a complementary reference for probabilistic assignment, as its soft 
-assignment mechanism facilitates the interpretation of ambiguous sample points. Though 
-agglomerative clustering shows some competitive structures at certain values of $K$, 
-it does not consistently outperform K-means. 
-\newline Moreover, the corresponding external scores are modest, indicating that the unsupervised 
-clusters only partially correspond to the academic outcome labels. Such moderate agreement 
-with ground-truth labels is typical in educational datasets, where student outcomes are shaped 
-by multi-dimensional factors that cannot be fully captured by distance-based partitioning alone. 
-This observation aligns with the t-SNE visualization where the Enrolled class is not cleanly 
-separable in low-dimensional space.
+\textbf{Determination of the Clustering Method:} At $K=3$, a consistent performance 
+ranking is observed: K-means achieves the best overall performance, followed by 
+hierarchical clustering, with GMM being the weakest. This ordering is mainly attributed 
+to the data characteristics after one-hot encoding: the dataset becomes sparse, 
+high-dimensional and dominated by binary features. K-means relies on Euclidean distance 
+to identify compact cluster centroids. In such a sparse binary feature space, samples from the same latent category 
+share a large number of activated features, making centroid representations meaningful 
+and clustering effective. Hierarchical clustering is also capable of capturing inherent 
+group structures, yet its fixed Ward linkage criterion limits the global optimization of 
+within-cluster compactness, leading to slightly inferior performance. By contrast, GMM 
+assumes each cluster follows an elliptical Gaussian distribution, which is strongly violated 
+by the sparse, axis-aligned binary features in this study. Consequently, the Expectation-Maximization 
+algorithm consequently fails to derive stable covariance matrices, resulting in negative 
+Silhouette scores (indicating poor cluster separation) and considerably lower external matching scores.
+
+Accordingly, we select \textbf{K-means with $K=3$ as the primary clustering approach, with hierarchical 
+clustering serving as a supplementary reference.} GMM is not recommended due to its unsatisfactory 
+performance and inherent incompatibility with the data structure.
+
+In addition, all methods show only moderate external evaluation scores, suggesting that unsupervised 
+clustering partitions can only partially align with real academic outcome labels. Such moderate agreement 
+is common in educational datasets, as student academic performance is driven by multidimensional factors 
+that cannot be fully captured by distance-based clustering alone. This finding is consistent with the 
+t-SNE visualization, where the “Enrolled” category exhibits no clear separability in low-dimensional space.
 
 \subsection{Prediction: Training and Testing}
 % Aim: ~1 page. Models + split + confusion matrices + comparison.
