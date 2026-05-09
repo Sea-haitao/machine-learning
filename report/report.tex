@@ -388,49 +388,44 @@ operating choice if predictive performance is prioritised.
   \label{fig:phase6-models}
 \end{figure}
 
-\subsection{Feature Engineering and Selection}
+\subsection{Feature Engineering}
 
-The second exploration constructs twelve business-driven features
-from the cleaned raw feature table before model fitting. These features
-summarise academic performance (\emph{semester pass rates},
-\emph{total pass rate}, \emph{grade mean}, \emph{grade trend},
-\emph{high failure risk}), family background (\emph{average parental
-qualification}, \emph{same parent occupation}), and economic pressure
-(\emph{financial stress}, \emph{tuition/debt status}, scholarship, and
-macroeconomic risk). The clearest single engineered signal is
-\emph{high failure risk}: students with pass rate below $50\%$ have a
-Dropout rate of $0.876$, versus $0.180$ for the remaining students.
+\paragraph{Business-driven Feature Construction.}
+This exploration constructs twelve business-driven features from the cleaned raw feature table before model fitting. Specifically, academic performance (semester pass rates, total pass rate, grade mean, grade trend, high failure risk) is quantified by features like pass rates and grade trends to identify students at high risk of failure; family background (average parental qualification, identical parental occupation) is captured by features such as average parental qualification and identical parental occupation; and economic pressure (financial stress, tuition/debt status, scholarship, and macroeconomic risk) is measured using indicators of personal financial stress and macroeconomic conditions. Testing results on all samples showed that students with a total pass rate below 50\% had a dropout rate of 88.4\%, whereas students with a total pass rate at or above 50\% had a dropout rate of only 17.4\%, confirming the strong discriminative power of the constructed features.
 
-To avoid leakage, feature construction and Recursive Feature
-Elimination (RFE) are placed inside the cross-validation pipeline. The
-feature space changes from 36 raw features to 48 after engineering,
-then RFE selects 30 features for the Random Forest estimator.
+\paragraph{Leakage Prevention and Feature Selection.}
+To avoid data leakage, feature construction and Recursive Feature Elimination (RFE) are embedded within the cross-validation pipeline. The feature space expands from 36 raw features to 48 after feature engineering; RFE then selects 30 features for the Random Forest estimator, balancing model complexity and predictive power.
+
+\paragraph{Transformation Exclusion Rationale.}
+Polynomial and power transformations (log etc.) were deliberately excluded after skewness inspection, based on our prior exploratory findings, for the following reasons:
+\begin{itemize}
+  \item Extreme skewness reflected genuine business signals and not necessarily noise;
+  \item Random Forest is invariant to monotonic transformations;
+  \item Experiments showed no performance loss but improved stability;
+  \item Polynomial or power transformations may add feature noise and make the business interpretation weaker without solving the main Enrolled-class overlap.
+\end{itemize}
 
 \begin{table}[h]
-  \centering
-  \caption{Feature-engineering validation using 5-fold stratified CV
-    with Random Forest. The gain is modest, but it is measured inside
-    the CV pipeline and therefore does not rely on full-data feature
-    selection.}
-  \label{tab:phase6-features}
-  \begin{tabular}{lrrrr}
-    \toprule
-    Feature Set & Dim. & Accuracy & F1\,\textsubscript{macro}
-                & F1\,\textsubscript{weighted} \\
-    \midrule
-    Original raw features & $36$ & $0.767$ & $0.680$ & $0.749$ \\
-    Engineered + RFE      & $30$ & $0.773$ & $0.695$ & $0.760$ \\
-    \bottomrule
-  \end{tabular}
+\centering
+\small
+\setlength{\tabcolsep}{3pt}
+\caption{Feature-engineering validation using 5-fold stratified CV with Random Forest. Both the baseline and optimized models adopt identical Random Forest hyperparameters: $n\_estimators=100$, $class\_weight='balanced'$, $random\_state=42$, and $n\_jobs=-1$. Performance improvement is moderate yet credible. All evaluations are implemented within the CV pipeline, eliminating full-data feature selection leakage.}
+\label{tab:feat_eng_valid}
+\begin{tabular}{lrrrrrrrrll}
+\toprule
+Feature Set & CV Acc & Macro Prec & W. Prec & Macro Rec & W. Rec & Macro F1 & W. F1 & Dim & $\Delta$ Acc & $\Delta$ F1 \\
+\midrule
+Original Raw Features & 0.7667 & 0.7154 & 0.7504 & 0.6707 & 0.7667 & 0.6798 & 0.7492 & 36 & -- & -- \\
+Engineered (RFE-30) & 0.7733 & 0.7220 & 0.7591 & 0.6854 & 0.7733 & 0.6952 & 0.7599 & 30 & +0.66\% & +1.54\% \\
+\bottomrule
+\end{tabular}
 \end{table}
 
-The result is not a large jump, but it is credible: the engineered
-features improve macro-F1 by $1.54$ percentage points while reducing
-dimensionality. This is stronger evidence than a large but leaky gain
-would be. Polynomial or power transformations were deliberately
-disabled after skewness inspection, because they add feature noise and
-make the business interpretation weaker without solving the main
-Enrolled-class overlap.
+The engineered features boost overall accuracy by 0.66\% and macro-F1 by 1.54\%, while simultaneously reducing feature dimensionality. The larger gain in macro F1 indicates improved recognition performance for the minority dropout class.
+
+Effective feature engineering integrates business logic, data distribution characteristics and model inherent properties, rather than simply stacking feature dimensions. Future work may incorporate Boruta feature selection and SMOTE resampling within a similar pipeline framework.
+
+
 
 % =====================================================================
 \section{Conclusion}
