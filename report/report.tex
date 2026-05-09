@@ -66,14 +66,15 @@ Headline results:
         Graduate) with Enrolled students dispersed between them —
         consistent with confusion-matrix evidence that Enrolled is
         the hardest class.
-  \item $K{=}3$ is the preferred cluster count for K-means,
-        Hierarchical, and GMM. K-means wins on internal metrics;
-        GMM wins on external agreement with true labels; all external
-        scores are moderate (Purity $\approx 0.65$).
+  \item $K{=}3$ is the preferred cluster number for K-means, hierarchical 
+        clustering and GMM. K-means outperforms the others overall, while 
+        hierarchical clustering shows comparable yet slightly weaker performance, 
+        and GMM is markedly less effective. Nevertheless, all methods achieve 
+        modest external agreement with the true labels.
   \item Validation-driven tuning lifts the Decision Tree's macro AUC
         from $0.729$ to $0.838$, with the binding constraints being
         \texttt{max\_depth=5} and \texttt{class\_weight="balanced"}.
-  \item A broader Phase 6 search over seven model families selects
+  \item A broader open-ended exploration over seven model families selects
         Random Forest as the strongest final model (test macro-F1
         $0.714$, macro AUC $0.889$), and leak-free feature engineering
         with RFE gives a modest but consistent CV macro-F1 gain.
@@ -163,9 +164,9 @@ metrics (ARI, NMI, Purity) against the true class labels.
     \toprule
     Algorithm    & Silhouette & CH      & DB    & ARI   & NMI   & Purity \\
     \midrule
-    K-means      & $0.247$    & $731.45$& $1.73$& $0.162$ & $0.166$ & $0.645$ \\
-    Hierarchical & $0.212$    & $645.82$& $1.76$& $0.123$ & $0.134$ & $0.624$ \\
-    GMM          & $0.138$    & $472.38$& $2.98$& $0.194$ & $0.166$ & $0.649$ \\
+    K-means      & $0.245$    & $804.66$& $1.67$& $0.149$ & $0.157$ & $0.639$ \\
+    Hierarchical & $0.218$    & $729.21$& $1.71$& $0.142$ & $0.149$ & $0.634$ \\
+    GMM          & $-0.058$    & $21.32$& $7.29$& $0.020$ & $0.022$ & $0.524$ \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -179,11 +180,10 @@ to identify compact cluster centroids. In such a sparse binary feature space, sa
 share a large number of activated features, making centroid representations meaningful 
 and clustering effective. Hierarchical clustering is also capable of capturing inherent 
 group structures, yet its fixed Ward linkage criterion limits the global optimization of 
-within-cluster compactness, leading to slightly inferior performance. By contrast, GMM 
-assumes each cluster follows an elliptical Gaussian distribution, which is strongly violated 
-by the sparse, axis-aligned binary features in this study. Consequently, the Expectation-Maximization 
-algorithm consequently fails to derive stable covariance matrices, resulting in negative 
-Silhouette scores (indicating poor cluster separation) and considerably lower external matching scores.
+within-cluster compactness, leading to slightly inferior performance. By contrast, GMM assumes each cluster 
+follows a multivariate Gaussian distribution, a condition severely compromised by the sparsity and high 
+dimensionality of the one-hot encoded binary features. This leads to unstable covariance estimation and poor 
+clustering separation, resulting in negative Silhouette scores and considerably lower external matching scores.
 
 Accordingly, we select \textbf{K-means with $K=3$ as the primary clustering approach, with hierarchical 
 clustering serving as a supplementary reference.} GMM is not recommended due to its unsatisfactory 
@@ -308,7 +308,7 @@ improvement in the project, directly addressing the overfitting
 observed in Section~2.4. LR gains are marginal because the baseline
 is already well-regularised.
 
-\paragraph{Further discussion (100--200 words).}
+\paragraph{Further discussion.}
 On the fixed 70/30 test split, Logistic Regression outperforms the
 Decision Tree on class-balanced metrics. Baseline LR reaches
 macro-F1 $\approx 0.70$ and macro AUC $\approx 0.86$, while the
@@ -323,8 +323,9 @@ tuning select similar LR settings and test performance barely
 changes, suggesting LR is already near a good optimum under this
 feature representation. For the Decision Tree, tuning (depth cap
 plus class weighting) lifts macro AUC from $0.73$ to $0.84$ and
-narrows the gap to LR. We select the CV-tuned LR as the final
-operating model on macro-F1/AUC held-out performance.
+narrows the gap to LR. For the mandatory task, we select the CV-tuned LR as the final
+operating model on macro-F1/AUC held-out performance. The open-ended exploration 
+will revisit this choice.
 
 % =====================================================================
 \section{Open-ended Exploration}
